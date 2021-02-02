@@ -4,15 +4,18 @@ import styles from "./Products.module.css";
 import { connect } from "react-redux";
 
 import Product from "./Product/Product";
+import Navbar from "../Navbar/Navbar";
 
-const Products = ({products}) => {
+const Products = ({ products }) => {
   return (
-    <div className={styles.products}>
-      {products.map(product => (
-        <Product key={product.id} productData={product}/>
-      ))}
-      
-    </div>
+    <>
+      <Navbar />
+      <div className={styles.products}>
+        {products.map(product => (
+          <Product key={product.id} productData={product} />
+        ))}
+      </div>
+    </>
   );
 };
 

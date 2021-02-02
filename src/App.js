@@ -1,42 +1,70 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect
-} from "react-router-dom";
-import "./App.css";
+import React, { useEffect, useState } from "react";
+import { Router, Route, Link, Switch } from "react-router-dom";
 
-import { connect } from "react-redux";
-
-import Navbar from "./components/Navbar/Navbar";
+import { history } from "./helpers/history";
+import { Role } from "./helpers/role";
+import { authenticationService } from "./services/authentication.service";
+import { PrivateRoute } from "./components/PrivateRoute";
+import AdminPage from "./AdminPage";
+import LoginPage from "./LoginPage";
 import Products from "./components/Products/Products";
 import Cart from "./components/Cart/Cart";
 import SingleItem from "./components/SingleItem/SingleItem";
+import "./App.css";
 
-function App({ currentItem }) {
+const App = () => {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(null);
+
+  useEffect(() => {
+    authenticationService.currentUser.subscribe(x => {
+      setCurrentUser(x);
+      setIsAdmin(x && x.role === Role.Admin);
+    });
+  }, []);
+
+  const logout = () => {
+    authenticationService.logout();
+    history.push("/login");
+  };
+
   return (
-    <Router>
-      <div className="app">
-        <Navbar />
-        <Switch>
-          <Route exact path="/" component={Products} />
-          <Route exact path="/cart" component={Cart} />
-          {!currentItem ? (
-            <Redirect to="/" />
-          ) : (
-            <Route exact path="/product/:id" component={SingleItem} />
-          )}
-        </Switch>
+    <Router history={history}>
+      <div>
+        {currentUser && (
+          <nav className="navbar navbar-expand navbar-dark bg-dark">
+            <div className="navbar-nav">
+              {isAdmin && (
+                <Link to="/admin" className="nav-item nav-link">
+                  Admin
+                </Link>
+              )}
+              <button onClick={logout} className="nav-item nav-link btn">
+                Logout
+              </button>
+            </div>
+          </nav>
+        )}
+        <div>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/"
+              component={isAdmin ? AdminPage : Products}
+            />
+            <PrivateRoute exact path="/cart" component={Cart} />
+            <PrivateRoute exact path="/product/:id" component={SingleItem} />
+          </Switch>
+          <PrivateRoute
+            path="/admin"
+            roles={[Role.Admin]}
+            component={AdminPage}
+          />
+          <Route path="/login" component={LoginPage} />
+        </div>
       </div>
     </Router>
   );
-}
-
-const mapStateToProps = state => {
-  return {
-    currentItem: state.shop.currentItem
-  };
 };
 
-export default connect(mapStateToProps)(App);
+export default App;

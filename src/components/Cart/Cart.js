@@ -4,6 +4,7 @@ import styles from "./Cart.module.css";
 import { connect } from "react-redux";
 
 import CartItem from "./CartItem/CartItem";
+import Navbar from "../Navbar/Navbar";
 
 const Cart = ({ cart }) => {
   const [totalPrice, setTotalPrice] = useState(0);
@@ -19,27 +20,29 @@ const Cart = ({ cart }) => {
 
     setTotalItems(items);
     setTotalPrice(price);
-    
   }, [cart, totalPrice, totalItems]);
 
   return (
-    <div className={styles.cart}>
-      <div className={styles.cart__items}>
-        {cart.map(item => (
-          <CartItem key={item.id} itemData={item} />
-        ))}
-      </div>
-      <div className={styles.cart__summary}>
-        <h4 className={styles.summary__title}>Cart Summary</h4>
-        <div className={styles.summary__price}>
-          <span>TOTAL: ({totalItems} items)</span>
-          <span>$ {totalPrice}</span>
+    <>
+      <Navbar />
+      <div className={styles.cart}>
+        <div className={styles.cart__items}>
+          {cart.map(item => (
+            <CartItem key={item.id} itemData={item} />
+          ))}
         </div>
-        <button className={styles.summary__checkoutBtn}>
-          Proceed To Checkout
-        </button>
+        <div className={styles.cart__summary}>
+          <h4 className={styles.summary__title}>Cart Summary</h4>
+          <div className={styles.summary__price}>
+            <span>TOTAL: ({totalItems} items)</span>
+            <span>$ {totalPrice}</span>
+          </div>
+          <button className={styles.summary__checkoutBtn}>
+            Proceed To Checkout
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
