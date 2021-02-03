@@ -5,7 +5,7 @@ import { history } from "./helpers/history";
 import { Role } from "./helpers/role";
 import { authenticationService } from "./services/authentication.service";
 import { PrivateRoute } from "./components/PrivateRoute";
-import AdminPage from "./AdminPage";
+import AdminPage from "./components/Admin/AdminPage";
 import LoginPage from "./LoginPage";
 import Products from "./components/Products/Products";
 import Cart from "./components/Cart/Cart";
