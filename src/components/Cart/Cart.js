@@ -13,7 +13,8 @@ const Cart = ({ cart }) => {
   useEffect(() => {
     let items = 0;
     let price = 0;
-    cart.forEach(item => {
+    //cart
+    JSON.parse(localStorage.getItem("products")).cart.forEach((item) => {
       items += item.qty;
       price += item.qty * item.price;
     });
@@ -27,7 +28,8 @@ const Cart = ({ cart }) => {
       <Navbar />
       <div className={styles.cart}>
         <div className={styles.cart__items}>
-          {cart.map(item => (
+          {/* cart */}
+          {JSON.parse(localStorage.getItem("products")).cart.map((item) => (
             <CartItem key={item.id} itemData={item} />
           ))}
         </div>
@@ -46,9 +48,9 @@ const Cart = ({ cart }) => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    cart: state.shop.cart
+    cart: state.shop.cart,
   };
 };
 
