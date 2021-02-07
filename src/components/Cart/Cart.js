@@ -13,8 +13,8 @@ const Cart = ({ cart }) => {
   useEffect(() => {
     let items = 0;
     let price = 0;
-    //cart
-    JSON.parse(localStorage.getItem("products")).cart.forEach((item) => {
+    //JSON.parse(localStorage.getItem("products")).cart.forEach((item)
+    cart.forEach((item) => {
       items += item.qty;
       price += item.qty * item.price;
     });

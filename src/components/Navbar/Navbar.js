@@ -9,8 +9,8 @@ const Navbar = ({ cart }) => {
 
   useEffect(() => {
     let count = 0;
-    //cart
-    JSON.parse(localStorage.getItem("products")).cart.forEach((item) => {
+    // JSON.parse(localStorage.getItem("products")).
+    cart.forEach((item) => {
       count += item.qty;
     });
     setCartCount(count);

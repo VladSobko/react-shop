@@ -31,7 +31,7 @@ const productsInitialState = [
 
 const INITIAL_STATE = {
   products:
-    JSON.parse(localStorage.getItem("products")).products ||
+    // JSON.parse(localStorage.getItem("products")).products ||
     productsInitialState,
   cart: [],
   currentItem: null,
@@ -70,7 +70,10 @@ const shopReducer = (state = INITIAL_STATE, action) => {
         "products",
         JSON.stringify(stateCopyOnRemoveFromCart)
       );
-      localStorage.setItem("products", JSON.stringify(stateCopyOnRemoveFromCart));
+      localStorage.setItem(
+        "products",
+        JSON.stringify(stateCopyOnRemoveFromCart)
+      );
       return stateCopyOnRemoveFromCart;
 
     case actionTypes.ADJUST_ITEM_QTY:

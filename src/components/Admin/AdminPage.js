@@ -16,7 +16,7 @@ const AdminPage = ({
   deleteProduct,
   updateProduct,
 }) => {
-  const addNewProduct = useCallback(() => {
+  const addNewProduct = () => {
     addProduct({
       id:
         Math.max(
@@ -29,27 +29,21 @@ const AdminPage = ({
       price: 1,
       image: "",
     });
-  }, [addProduct, productList]);
+  };
 
-  const deleteProductF = useCallback(
-    (id) => {
-      deleteProduct(id);
-    },
-    [deleteProduct]
-  );
+  const deleteProductF = (id) => {
+    deleteProduct(id);
+  };
 
-  const editProductSubmit = useCallback(
-    (id, title, description, price, image) => {
-      updateProduct({
-        id: id,
-        title: title,
-        description: description,
-        price: price,
-        image: image,
-      });
-    },
-    [updateProduct]
-  );
+  const editProductSubmit = (id, title, description, price, image) => {
+    updateProduct({
+      id: id,
+      title: title,
+      description: description,
+      price: price,
+      image: image,
+    });
+  };
   return (
     <div className="container-fluid">
       <div className="row mt-3">
