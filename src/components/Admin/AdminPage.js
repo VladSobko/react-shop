@@ -58,16 +58,17 @@ const AdminPage = ({
                     <th>Description</th>
                     <th>Price</th>
                     <th>Image URI</th>
-                    <th>Edit/Save</th>
-                    <th>Delete</th>
+                    {/* <th>Edit/Save</th> */}
+                    <th>Actions</th>
                   </tr>
                 </thead>
-                <ProductList
-                  productList={productList}
-                  deleteProduct={deleteProductF}
-                  editProductSubmit={editProductSubmit}
-                />
               </table>
+              <ProductList
+                productList={productList}
+                deleteProduct={deleteProductF}
+                editProductSubmit={editProductSubmit}
+              />
+
               <button
                 className="btn btn-dark pull-left"
                 onClick={() => addNewProduct()}

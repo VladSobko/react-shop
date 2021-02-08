@@ -4,7 +4,7 @@ import ProductItem from "./ProductItem";
 
 const ProductList = ({ productList, editProductSubmit, deleteProduct }) => {
   return (
-    <tbody>
+    <>
       {[...productList].map((item, index) => (
         <ProductItem
           key={index}
@@ -14,7 +14,7 @@ const ProductList = ({ productList, editProductSubmit, deleteProduct }) => {
           deleteProduct={deleteProduct}
         />
       ))}
-    </tbody>
+    </>
   );
 };
 

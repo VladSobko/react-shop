@@ -1,0 +1,28 @@
+.title {
+  width: 15%;
+}
+.desc {
+  width: 25%;
+}
+.price {
+  width: 5%;
+}
+.image {
+  width: 35%;
+}
+
+.titleInp {
+  width: 15%;
+}
+.descInp {
+  width: 25%;
+  margin-left: 1%;
+}
+.priceInp {
+  width: 4%;
+  margin-left: 1%;
+}
+.imageInp {
+  width: 35%;
+  margin-left: 1%;
+}

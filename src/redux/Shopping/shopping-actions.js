@@ -37,14 +37,14 @@ export const loadCurrentItem = (item) => {
 
 export function addProduct(product) {
   return {
-    type: "ADD_PRODUCT",
+    type: actionTypes.ADD_PRODUCT,
     payload: product,
   };
 }
 
 export function deleteProduct(itemID) {
   return {
-    type: "DELETE_PRODUCT",
+    type: actionTypes.DELETE_PRODUCT,
     payload: {
       id: itemID,
     },
@@ -53,7 +53,7 @@ export function deleteProduct(itemID) {
 
 export function updateProduct(product) {
   return {
-    type: "UPDATE_PRODUCT",
+    type: actionTypes.UPDATE_PRODUCT,
     payload: product,
   };
 }
