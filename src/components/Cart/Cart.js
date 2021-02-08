@@ -1,37 +1,33 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Cart.module.css";
-
 import { connect } from "react-redux";
 
 import CartItem from "./CartItem/CartItem";
 import Navbar from "../Navbar/Navbar";
+
+import styles from "./Cart.module.css";
 
 const Cart = ({ cart }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
-    let items = 0;
-    let price = 0;
-    //JSON.parse(localStorage.getItem("products")).cart.forEach((item)
-    cart.forEach((item) => {
-      items += item.qty;
-      price += item.qty * item.price;
-    });
+    const items = cart.reduce((items, item) => items + item.qty, 0);
+    const price = cart.reduce((price, item) => price + item.qty * item.price, 0);
 
     setTotalItems(items);
     setTotalPrice(price);
   }, [cart, totalPrice, totalItems]);
+
+  const CartItems = () => {
+    return cart.map((item) => <CartItem key={item.id} itemData={item} />);
+  };
 
   return (
     <>
       <Navbar />
       <div className={styles.cart}>
         <div className={styles.cart__items}>
-          {/* cart */}
-          {JSON.parse(localStorage.getItem("products")).cart.map((item) => (
-            <CartItem key={item.id} itemData={item} />
-          ))}
+          <CartItems />
         </div>
         <div className={styles.cart__summary}>
           <h4 className={styles.summary__title}>Cart Summary</h4>

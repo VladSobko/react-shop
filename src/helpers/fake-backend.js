@@ -23,20 +23,23 @@ export const configureFakeBackend = () => {
     return new Promise((resolve, reject) => {
       // wrap in timeout to simulate server api call
       setTimeout(() => {
-        // authenticate - public
         const params = JSON.parse(opts.body);
         const user = users.find(
           (x) =>
             x.username === params.username && x.password === params.password
         );
+
         if (!user) return error("Username or password is incorrect");
+
+        const { id, username, firstName, lastName, role } = user;
+        
         return ok({
-          id: user.id,
-          username: user.username,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          role: user.role,
-          token: `fake-jwt-token.${user.role}`,
+          id: id,
+          username: username,
+          firstName: firstName,
+          lastName: lastName,
+          role: role,
+          token: `fake-jwt-token.${role}`,
         });
 
         // private helper functions

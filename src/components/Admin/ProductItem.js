@@ -1,24 +1,48 @@
 import React, { Component } from "react";
 
+const ProductItemView = ({ index, title, description, price, image, openEditingMode, deleteProduct }) => {
+  return (
+    <tr key={index}>
+      <td>{title}</td>
+      <td>{description}</td>
+      <td>{price}</td>
+      <td>{image}</td>
+      <td>
+        <button className="btn btn-warning" onClick={openEditingMode}>
+          Edit
+        </button>
+      </td>
+      <td>
+        <button className="btn btn-danger" onClick={deleteProduct}>
+          Delete
+        </button>
+      </td>
+    </tr>
+  );
+};
+
 export default class ProductItem extends Component {
   constructor(props) {
     super(props);
     this.state = { isEdit: false };
-    this.editProduct = this.editProduct.bind(this);
+    this.openEditingMode = this.openEditingMode.bind(this);
     this.editProductSubmit = this.editProductSubmit.bind(this);
     this.deleteProduct = this.deleteProduct.bind(this);
   }
+
   deleteProduct() {
     const { id } = this.props.product;
     this.props.deleteProduct(id);
   }
-  editProduct() {
-    this.setState((prevState, props) => ({
+
+  openEditingMode() {
+    this.setState((prevState) => ({
       isEdit: !prevState.isEdit,
     }));
   }
+
   editProductSubmit() {
-    this.setState((prevState, props) => ({
+    this.setState((prevState) => ({
       isEdit: !prevState.isEdit,
     }));
     this.props.editProductSubmit(
@@ -29,10 +53,12 @@ export default class ProductItem extends Component {
       this.imageInput.value
     );
   }
+
   render() {
-    const { title, description, price, image } = this.props.product;
-    return this.state.isEdit === true ? (
-      <tr className="bg-warning" key={this.props.index}>
+    const { index, title, description, price, image } = this.props.product;
+    const { isEdit } = this.state;
+    return isEdit ? (
+      <tr className="bg-warning" key={index}>
         <td>
           <input
             ref={(titleInput) => (this.titleInput = titleInput)}
@@ -69,22 +95,16 @@ export default class ProductItem extends Component {
         </td>
       </tr>
     ) : (
-      <tr key={this.props.index}>
-        <td>{title}</td>
-        <td>{description}</td>
-        <td>{price}</td>
-        <td>{image}</td>
-        <td>
-          <button className="btn btn-warning" onClick={this.editProduct}>
-            Edit
-          </button>
-        </td>
-        <td>
-          <button className="btn btn-danger" onClick={this.deleteProduct}>
-            Delete
-          </button>
-        </td>
-      </tr>
+      <ProductItemView
+        index={index}
+        title={title}
+        description={description}
+        image={image}
+        price={price}
+        deleteProduct={this.deleteProduct}
+        openEditingMode={this.openEditingMode}
+        
+      />
     );
   }
 }

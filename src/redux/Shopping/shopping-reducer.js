@@ -30,103 +30,118 @@ const productsInitialState = [
 ];
 
 const INITIAL_STATE = {
-  products:
-    // JSON.parse(localStorage.getItem("products")).products ||
-    productsInitialState,
+  products: productsInitialState,
   cart: [],
   currentItem: null,
 };
 
 const shopReducer = (state = INITIAL_STATE, action) => {
+  const addToCart = () => {
+    // Get Item data from products array
+    const item = state.products.find(
+      (product) => product.id === action.payload.id
+    );
+    // Check if Item is in cart already
+    const inCart = state.cart.find((item) => item.id === action.payload.id);
+
+    const cartWithExistingItem = state.cart.map((item) =>
+      item.id === action.payload.id ? { ...item, qty: item.qty + 1 } : item
+    );
+    const cartWithNewItem = [...state.cart, { ...item, qty: 1 }];
+
+    let stateCopyOnAddToCart = {
+      ...state,
+      cart: inCart ? cartWithExistingItem : cartWithNewItem,
+    };
+    localStorage.setItem("products", JSON.stringify(stateCopyOnAddToCart));
+    return stateCopyOnAddToCart;
+  };
+
+  const removeFromCart = () => {
+    let stateCopyOnRemoveFromCart = {
+      ...state,
+      cart: state.cart.filter((item) => item.id !== action.payload.id),
+    };
+    localStorage.setItem("products", JSON.stringify(stateCopyOnRemoveFromCart));
+    return stateCopyOnRemoveFromCart;
+  };
+
+  const adjustItemQty = () => {
+    return {
+      ...state,
+      cart: state.cart.map((item) =>
+        item.id === action.payload.id
+          ? { ...item, qty: +action.payload.qty }
+          : item
+      ),
+    };
+  };
+
+  const loadCurrentItem = () => {
+    return {
+      ...state,
+      currentItem: action.payload,
+    };
+  };
+
+  const addProduct = () => {
+    let stateCopyOnAdd = {
+      ...state,
+      products: state.products.concat(action.payload),
+    };
+    localStorage.setItem("products", JSON.stringify(stateCopyOnAdd));
+    return stateCopyOnAdd;
+  };
+
+  const deleteProduct = () => {
+    let stateCopyOnDel = {
+      ...state,
+      products: state.products.filter((item) => item.id !== action.payload.id),
+    };
+    localStorage.setItem("products", JSON.stringify(stateCopyOnDel));
+    return stateCopyOnDel;
+  };
+
+  const updateProduct = () => {
+    let stateCopyOnEdit = {
+      ...state,
+      products: state.products.map((item) =>
+        item.id === action.payload.id
+          ? {
+              ...item,
+              title: action.payload.title,
+              description: action.payload.description,
+              price: action.payload.price,
+              image: action.payload.image,
+            }
+          : item
+      ),
+    };
+    localStorage.setItem("products", JSON.stringify(stateCopyOnEdit));
+    return stateCopyOnEdit;
+  };
+
   switch (action.type) {
     case actionTypes.ADD_TO_CART:
-      // Get Item data from products array
-      const item = state.products.find(
-        (product) => product.id === action.payload.id
-      );
-      // Check if Item is in cart already
-      const inCart = state.cart.find((item) =>
-        item.id === action.payload.id ? true : false
-      );
-      let stateCopyOnAddToCart = {
-        ...state,
-        cart: inCart
-          ? state.cart.map((item) =>
-              item.id === action.payload.id
-                ? { ...item, qty: item.qty + 1 }
-                : item
-            )
-          : [...state.cart, { ...item, qty: 1 }],
-      };
-      localStorage.setItem("products", JSON.stringify(stateCopyOnAddToCart));
-      return stateCopyOnAddToCart;
+      return addToCart();
 
     case actionTypes.REMOVE_FROM_CART:
-      let stateCopyOnRemoveFromCart = {
-        ...state,
-        cart: state.cart.filter((item) => item.id !== action.payload.id),
-      };
-      localStorage.setItem(
-        "products",
-        JSON.stringify(stateCopyOnRemoveFromCart)
-      );
-      localStorage.setItem(
-        "products",
-        JSON.stringify(stateCopyOnRemoveFromCart)
-      );
-      return stateCopyOnRemoveFromCart;
+      return removeFromCart();
 
     case actionTypes.ADJUST_ITEM_QTY:
-      return {
-        ...state,
-        cart: state.cart.map((item) =>
-          item.id === action.payload.id
-            ? { ...item, qty: +action.payload.qty }
-            : item
-        ),
-      };
+      return adjustItemQty();
 
     case actionTypes.LOAD_CURRENT_ITEM:
-      return {
-        ...state,
-        currentItem: action.payload,
-      };
+      return loadCurrentItem();
 
-    case "ADD_PRODUCT":
-      let stateCopyOnAdd = {
-        ...state,
-        products: state.products.concat(action.payload),
-      };
-      localStorage.setItem("products", JSON.stringify(stateCopyOnAdd));
-      return stateCopyOnAdd;
+    case actionTypes.ADD_PRODUCT:
+      return addProduct();
 
-    case "DELETE_PRODUCT":
-      let stateCopyOnDel = {
-        ...state,
-        products: state.products.filter(
-          (item) => item.id !== action.payload.id
-        ),
-      };
-      localStorage.setItem("products", JSON.stringify(stateCopyOnDel));
-      return stateCopyOnDel;
+    case actionTypes.DELETE_PRODUCT:
+      return deleteProduct();
 
-    case "UPDATE_PRODUCT":
-      let stateCopyOnEdit = {
-        ...state,
-        products: state.products.map((item) =>
-          item.id === action.payload.id
-            ? {
-                ...item,
-                title: action.payload.title,
-                description: action.payload.description,
-                price: action.payload.price,
-                image: action.payload.image,
-              }
-            : item
-        ),
-      };
-      localStorage.setItem("products", JSON.stringify(stateCopyOnEdit));
-      return stateCopyOnEdit;
+    case actionTypes.UPDATE_PRODUCT:
+      return updateProduct();
 
     default:
       return state;
